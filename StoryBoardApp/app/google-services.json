@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "677296700107",
+    "firebase_url": "https://storyboardapp-4325e.firebaseio.com",
+    "project_id": "storyboardapp-4325e",
+    "storage_bucket": "storyboardapp-4325e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677296700107:android:c1ee3629177ec0417bb94e",
+        "android_client_info": {
+          "package_name": "com.example.storyboardapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677296700107-qvmrjf6qrrct8t23mirnv77r85nji224.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu0vBHguZfHPpKotxhs1OK4JF9A_p4Tf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677296700107-qvmrjf6qrrct8t23mirnv77r85nji224.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
