@@ -13,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StoryBoardApp">
         <activity android:name=".FeedActivity"></activity>
-        <activity android:name=".WritePostActivity" />
         <activity android:name=".Home" />
         <activity android:name="com.example.myapplication.BoardActivity" />
         <activity android:name=".RegisterUser" />
+        <activity android:name="com.example.postactivity.WritePostActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -4,65 +4,192 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="com.example.postactivity.WritePostActivity">
+
+    <View
+        android:id="@+id/BackImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#21343b"
+        tools:layout_editor_absoluteX="-29dp"
+        tools:layout_editor_absoluteY="-57dp" />
+
+    <View
+        android:id="@+id/backImage"
+        android:layout_width="353dp"
+        android:layout_height="529dp"
+        android:background="@drawable/grey_inner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/Body"
-        android:layout_width="300dp"
-        android:layout_height="350dp"
+        android:layout_width="297dp"
+        android:layout_height="322dp"
         android:gravity="top"
+        android:hint="Body"
+        app:backgroundTint="@color/lightGray"
         android:inputType="textMultiLine"
-        android:hint = "Body"
+        android:textColor="#96A7AF"
+        android:textColorHint="#96A7AF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.593" />
+        app:layout_constraintVertical_bias="0.466" />
 
     <EditText
         android:id="@+id/Title"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="297dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="4dp"
         android:hint="Title"
+        app:backgroundTint="@color/lightGray"
         android:inputType="textMultiLine"
+        android:textColor="#96A7AF"
+        android:textColorHint="#96A7AF"
         app:layout_constraintBottom_toTopOf="@+id/Body"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/PostText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="207dp"
+        android:layout_height="55dp"
+        android:fontFamily="@font/roboto"
         android:text="New Post"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:textColor="#96A7AF"
         app:layout_constraintBottom_toTopOf="@+id/Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.23"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.703" />
+        app:layout_constraintVertical_bias="0.576" />
 
-    <Button
-        android:id="@+id/AddPicButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Picture"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/GenreSpin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Body" />
 
     <Spinner
         android:id="@+id/GenreSpin"
-        android:layout_width="143dp"
-        android:layout_height="46dp"
+        android:layout_width="131dp"
+        android:layout_height="43dp"
         android:layout_marginEnd="60dp"
+        android:background="@drawable/btn_rounded"
+        android:textAlignment="textStart"
+        android:textColor="#30444d"
+        android:theme="@style/spinnerTheme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Body"
-        app:layout_constraintVertical_bias="0.492" />
+        app:layout_constraintVertical_bias="0.04" />
+
+    <ImageButton
+        android:id="@+id/Add_button"
+        android:layout_width="150dp"
+        android:layout_height="58dp"
+        android:adjustViewBounds="true"
+        android:background="?android:selectableItemBackground"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/GenreSpin"
+        app:layout_constraintHorizontal_bias="0.76"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Body"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/buttonplus2" />
+
+    <Button
+        android:id="@+id/Post_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_rounded"
+        android:text="Post"
+        android:textColor="@color/lightGray"
+        app:layout_constraintBottom_toBottomOf="@+id/BackImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.315"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GenreSpin"
+        app:layout_constraintVertical_bias="0.066" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        app:layout_constraintBottom_toBottomOf="@+id/GenreSpin"
+        app:layout_constraintEnd_toEndOf="@+id/GenreSpin"
+        app:layout_constraintHorizontal_bias="0.813"
+        app:layout_constraintStart_toStartOf="@+id/GenreSpin"
+        app:layout_constraintTop_toTopOf="@+id/GenreSpin"
+        app:layout_constraintVertical_bias="0.466"
+        app:srcCompat="@drawable/tri_but" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="47dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Add_button"
+        app:layout_constraintEnd_toEndOf="@+id/Add_button"
+        app:layout_constraintHorizontal_bias="0.085"
+        app:layout_constraintStart_toStartOf="@+id/Add_button"
+        app:layout_constraintTop_toTopOf="@+id/Add_button"
+        app:layout_constraintVertical_bias="0.333"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageSwitcher
+        android:id="@+id/imageView2"
+        android:layout_width="65dp"
+        android:layout_height="56dp"
+        android:background="@drawable/btn_rounded"
+        android:padding="2dp"
+        android:text="Nope"
+        app:layout_constraintBottom_toBottomOf="@+id/BackImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.687"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GenreSpin"
+        app:layout_constraintVertical_bias="0.071"
+        tools:srcCompat="@tools:sample/avatars">
+
+    </ImageSwitcher>
+
+    <ImageView
+        android:id="@+id/arrow_down"
+        android:layout_width="29dp"
+        android:layout_height="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/GenreSpin"
+        app:layout_constraintVertical_bias="0.196"
+        app:srcCompat="@drawable/triangle_right" />
+
+    <TextView
+        android:id="@+id/No_im"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Image"
+        android:fontFamily="@font/roboto"
+        android:textColor="#96A7AF"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+    <ImageView
+        android:id="@+id/arrow_up"
+        android:layout_width="29dp"
+        android:layout_height="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/Post_button"
+        app:layout_constraintTop_toBottomOf="@+id/GenreSpin"
+        app:layout_constraintVertical_bias="0.196"
+        app:srcCompat="@drawable/triangle_left" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

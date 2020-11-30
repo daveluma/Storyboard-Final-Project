@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="color_paragraph">#96A7AF</color>
     <color name="color_white">#FFF</color>
+    <color name="lightGray">#96A7AF</color>
 
 </resources>
