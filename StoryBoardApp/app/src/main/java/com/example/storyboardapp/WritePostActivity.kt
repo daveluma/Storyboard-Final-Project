@@ -2,23 +2,20 @@ package com.example.postactivity
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.Typeface
 import android.net.Uri
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.TestLooperManager
-import android.provider.MediaStore
-import android.util.Log
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
-import androidx.core.view.get
+import androidx.appcompat.app.AppCompatActivity
+import com.example.storyboardapp.Post
 import com.example.storyboardapp.R
-import java.util.jar.Manifest
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class WritePostActivity : AppCompatActivity() {
     private val  REQUEST_CODE = 100
@@ -32,28 +29,53 @@ class WritePostActivity : AppCompatActivity() {
     private lateinit var imageSwitcher : ImageSwitcher
     private var selected : Boolean = false
     private lateinit var no_text : TextView
+    private lateinit var database: FirebaseDatabase
+    private  lateinit var postRef: DatabaseReference
+    private var mAuth: FirebaseAuth? = null
+    private  lateinit var uid : String
 
+    private lateinit var body: EditText
+    private lateinit var title: EditText
+    private lateinit var post_btn: Button
+    private lateinit var add_btn: ImageButton
+    private lateinit var arrow_up: ImageView
+    private lateinit var arrow_down: ImageView
+    private lateinit var spin: String
+    private lateinit var spinner: Spinner
+
+    private lateinit var storage: FirebaseStorage
+    private lateinit var storageReference: StorageReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_write_post)
 
+        database = FirebaseDatabase.getInstance();
+        postRef = database.getReference("posts")
+        mAuth = FirebaseAuth.getInstance();
+        uid = mAuth!!.currentUser!!.uid
+
+
         no_text = findViewById(R.id.No_im)
-        val body = findViewById<EditText>(R.id.Body)
-        val title = findViewById<EditText>(R.id.Title)
-        val post_btn = findViewById<Button>(R.id.Post_button)
-        val add_btn = findViewById<ImageButton>(R.id.Add_button)
+        body = findViewById(R.id.Body)
+        title = findViewById(R.id.Title)
+        post_btn = findViewById(R.id.Post_button)
+        add_btn = findViewById(R.id.Add_button)
 
-        val arrow_up = findViewById<ImageView>(R.id.arrow_up)
-        val arrow_down = findViewById<ImageView>(R.id.arrow_down)
+        arrow_up = findViewById(R.id.arrow_up)
+        arrow_down = findViewById(R.id.arrow_down)
 
-        imageView = findViewById(R.id.imageView)
+        imageView = findViewById(R.id.imageViewTest)
         imageSwitcher = findViewById<ImageSwitcher>(R.id.imageView2)
         imageSwitcher.setFactory { ImageView(applicationContext) }
 
         images = ArrayList()
 
-        val spinner: Spinner = findViewById(R.id.GenreSpin)
+        spinner = findViewById(R.id.GenreSpin)
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.reference;
+
         ArrayAdapter.createFromResource(
                 this,
                 R.array.GenreSpin,
@@ -101,17 +123,24 @@ class WritePostActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,"There is no title!",Toast.LENGTH_LONG).show()
             }
             else{
-                var spin = spinner.selectedItem.toString()
-                if (selected)
-                {
-                    //TODO send imageView to the next activity
-                    Toast.makeText(applicationContext,"Title: ${title.text} \nBody: ${body.text} \nGenre: ${spin}",Toast.LENGTH_LONG).show()
-                }
+                spin = spinner.selectedItem.toString()
 
                 //TODO send title, body, and genre to the next view
                 Toast.makeText(applicationContext,"Success!",Toast.LENGTH_LONG).show()
+                uploadImages()
+                val newPost = Post(title.text.toString(), body.text.toString(), spin, arrayListOf("tf"))
+                postRef.child(uid).push().setValue(newPost).addOnSuccessListener() {
+                    finish()
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Something went wrong with uploading your images", Toast.LENGTH_LONG).show()
+                }
             }
+
+
+
         }
+
+
     }
 
     private fun pickImageIntent(){
@@ -120,6 +149,7 @@ class WritePostActivity : AppCompatActivity() {
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Select Images(s)"), PICK_IMAGES_CODE)
+        selected = true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -138,9 +168,23 @@ class WritePostActivity : AppCompatActivity() {
         //single
         else {
             val imageUri = data?.data
-
+            println("here")
+            println(imageUri)
             imageSwitcher.setImageURI(imageUri)
             position = 0
+        }
+    }
+
+    private fun uploadImages() {
+        for (i in 0 until images!!.size) {
+            val img = images!![0]
+            val name = "${UUID.randomUUID()}"
+            val imagesRef = storageReference.child("images/${name}")
+            // TODO
+//            GlideApp.with(this)
+//                .load(gsReference)
+//                .into(imageView)
+
         }
     }
 
