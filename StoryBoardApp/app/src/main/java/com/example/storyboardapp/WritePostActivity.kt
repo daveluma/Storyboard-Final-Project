@@ -128,8 +128,8 @@ class WritePostActivity : AppCompatActivity() {
                 //TODO send title, body, and genre to the next view
                 Toast.makeText(applicationContext,"Success!",Toast.LENGTH_LONG).show()
                 uploadImages()
-                val newPost = Post(title.text.toString(), body.text.toString(), spin, arrayListOf("tf"))
-                postRef.child(uid).push().setValue(newPost).addOnSuccessListener() {
+                val newPost = Post(uid, title.text.toString(), body.text.toString(), spin, arrayListOf("tf"))
+                postRef.push().setValue(newPost).addOnSuccessListener() {
                     finish()
                 }.addOnFailureListener {
                     Toast.makeText(this, "Something went wrong with uploading your images", Toast.LENGTH_LONG).show()

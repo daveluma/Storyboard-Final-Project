@@ -2,9 +2,7 @@ package com.example.storyboardapp
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,15 +10,25 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.GridView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.BoardActivity
 import com.example.postactivity.WritePostActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+
 
 class Home : AppCompatActivity() {
     private lateinit var createPost : Button
     private lateinit var boardPost : Button
     private lateinit var dashboard : Button
     private lateinit var gridView: GridView
-    private lateinit var images: IntArray;
+    private lateinit var images: IntArray
+    private lateinit var posts: ArrayList<Post>
+    private lateinit var database: FirebaseDatabase
+    private  lateinit var postRef: DatabaseReference
+    private lateinit var logoutButton: Button
+    private var mAuth: FirebaseAuth? = null
+    private  lateinit var uid : String
 //    private lateinit var titles: Array<String>;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +38,7 @@ class Home : AppCompatActivity() {
         createPost = findViewById(R.id.buttonCreatePost)
         boardPost = findViewById(R.id.buttonBoardPost)
         dashboard = findViewById(R.id.buttonDashboard)
+        logoutButton = findViewById(R.id.buttonLogout)
 
         createPost.setOnClickListener {
             startActivity(Intent(this, WritePostActivity::class.java))
@@ -43,42 +52,61 @@ class Home : AppCompatActivity() {
         dashboard.setOnClickListener {
             startActivity(Intent(this, FeedActivity::class.java))
         }
+        logoutButton.setOnClickListener {
+            mAuth!!.signOut()
+            finish()
+        }
+
 
 
         // dynamic grid implementation https://www.youtube.com/watch?v=RtitGGmvvTI
+        posts = ArrayList()
         gridView = findViewById(R.id.gridView)
-        gridView.adapter = CustomAdapter(this)
-        // replace contents of intArrayOf(...) with user's images
+        gridView.adapter = CustomAdapter(this ,posts)
+        // replace contents of intArrayOf(...) with user's images7
         images = intArrayOf(R.drawable.ic_launcher_background)
-//        titles = Array<String>(1);
-//        titles[0] = "test name"
+
+        database = FirebaseDatabase.getInstance();
+        postRef = database.getReference("posts")
+        mAuth = FirebaseAuth.getInstance();
+        uid = mAuth!!.currentUser!!.uid
+        val reference: DatabaseReference = postRef
+        reference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    val postFromDB = Post(
+                        snapshot.child("uid").value as String,
+                        snapshot.child("title").value as String,
+                        snapshot.child("body").value as String,
+                        snapshot.child("genre").value as String,
+                        snapshot.child("images").value as List<String>)
+                    posts.add(postFromDB)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
 
     }
 
     // class for grid view adapter
     public class CustomAdapter: BaseAdapter {
-        private lateinit var imageNames: Array<String>
-        private lateinit var imagePhotos: Array<String>
         private lateinit var context: Context
         private lateinit var layoutInflater: LayoutInflater
-
-//        constructor(imageNames: Array<String>, imagePhotos: Array<String>, context: Context) : super() {
-//            this.imageNames = imageNames
-//            this.imagePhotos = imagePhotos
-//            this.context = context
-//            this.layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as (LayoutInflater)
-//        }
-        constructor(context: Context) : super() {
+        private lateinit var posts: ArrayList<Post>
+        constructor(context: Context, posts : ArrayList<Post>) : super() {
             this.context = context
             this.layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as (LayoutInflater)
+            this.posts = posts
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val view = layoutInflater.inflate(R.layout.story_board_cover_view, parent, false)
             val title = view.findViewById<TextView>(R.id.textViewCoverTitle)
-            title.text = "Sonic the HedgeHog lmao"
             val description = view.findViewById<TextView>(R.id.textViewCoverDescription)
-            description.text = "Sonic the Hedgehog is a really cool movie you should totally see it"
+
+            title.text = posts[position].title
+            description.text = posts[position].body
 
             return view
 
@@ -93,7 +121,7 @@ class Home : AppCompatActivity() {
         }
 
         override fun getCount(): Int {
-            return 20
+            return posts.size
         }
 
     }
