@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#22343C"
-    tools:context=".MainActivity"
     android:orientation="vertical">
 
 
@@ -14,15 +13,26 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:showDividers="middle"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp">
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp">
 
-        <ImageView
-            android:id="@+id/imageViewTest"
+        <!--        <ImageView-->
+        <!--            android:id="@+id/imageView"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="300dp"-->
+        <!--            android:layout_marginTop="32dp"-->
+        <!--            android:background="#0199FF" />-->
+
+        <com.synnapps.carouselview.CarouselView
+            android:id="@+id/carouselView"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="32dp"
-            android:background="#0199FF" />
+            android:layout_height="600dp"
+            app:fillColor="#FFFFFFFF"
+            app:pageColor="#00000000"
+            app:radius="6dp"
+            app:slideInterval="0"
+            app:strokeColor="#FF777777"
+            app:strokeWidth="1dp"/>
 
 
         <LinearLayout
@@ -36,7 +46,7 @@
                 android:id="@+id/textViewTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Harry Potter and the Deathly Hallows"
+                android:text=""
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -46,17 +56,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 >
-                <Button
-                    android:id="@+id/buttonLikeButton"
+
+                <ImageButton
+                    android:id="@+id/buttonLike"
                     android:layout_width="22dp"
                     android:layout_height="26dp"
-                    android:background="#FF0000"
                     android:layout_weight=".6"
-                    />
+                    android:background="@drawable/ic_heart"
+                    android:tint="@color/teal_700"
+                    android:onClick="handleLikeBtnOnPress"/>
                 <TextView
+                    android:id="@+id/textViewNumLikes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Likes"
+                    android:text=""
                     android:layout_marginLeft="5dp"
                     android:textColor="@color/color_white"/>
             </LinearLayout>
@@ -118,7 +131,9 @@
             android:layout_height="wrap_content"
             android:text="Comment"
             android:layout_marginTop="4dp"
-            android:layout_gravity="right"/>
+            android:layout_gravity="right"
+            android:onClick="handleCommentBtnOnPress"
+            />
         <ListView
             android:id="@+id/listViewComments"
             android:layout_width="match_parent"

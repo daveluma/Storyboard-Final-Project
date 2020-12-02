@@ -10,5 +10,5 @@
     <color name="color_paragraph">#96A7AF</color>
     <color name="color_white">#FFF</color>
     <color name="lightGray">#96A7AF</color>
-
+    <color name="color_red">#FF0000</color>
 </resources>
