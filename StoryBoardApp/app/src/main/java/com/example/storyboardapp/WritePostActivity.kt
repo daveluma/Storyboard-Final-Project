@@ -9,10 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.storyboardapp.Post
 import com.example.storyboardapp.R
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.type.DateTime
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -29,8 +30,8 @@ class WritePostActivity : AppCompatActivity() {
     private lateinit var imageSwitcher : ImageSwitcher
     private var selected : Boolean = false
     private lateinit var no_text : TextView
-    private lateinit var database: FirebaseDatabase
-    private  lateinit var postRef: DatabaseReference
+    private lateinit var db : FirebaseFirestore
+
     private var mAuth: FirebaseAuth? = null
     private  lateinit var uid : String
 
@@ -50,8 +51,8 @@ class WritePostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_write_post)
 
-        database = FirebaseDatabase.getInstance();
-        postRef = database.getReference("posts")
+        db = FirebaseFirestore.getInstance();
+
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth!!.currentUser!!.uid
 
@@ -128,8 +129,8 @@ class WritePostActivity : AppCompatActivity() {
                 //TODO send title, body, and genre to the next view
                 Toast.makeText(applicationContext,"Success!",Toast.LENGTH_LONG).show()
                 uploadImages()
-                val newPost = Post(uid, title.text.toString(), body.text.toString(), spin, arrayListOf("tf"))
-                postRef.push().setValue(newPost).addOnSuccessListener() {
+                val newPost = Post(uid, title.text.toString(), body.text.toString(), spin, arrayListOf("tf"), LocalDateTime.now().toString())
+                db.collection("posts").document().set(newPost).addOnSuccessListener() {
                     finish()
                 }.addOnFailureListener {
                     Toast.makeText(this, "Something went wrong with uploading your images", Toast.LENGTH_LONG).show()

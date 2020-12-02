@@ -16,6 +16,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import com.synnapps.carouselview.CarouselView
+import java.time.LocalDateTime
 
 
 class BoardActivity : Activity() {
@@ -114,7 +115,7 @@ class BoardActivity : Activity() {
 
     fun handleCommentBtnOnPress(view: View) {
         // TODO: need to add username from firebase
-        mCommentsAdapter.add(Comment("asdqweasd", mCommentEditText.text.toString()))
+        mCommentsAdapter.add(Comment("asdqweasd", mCommentEditText.text.toString(), LocalDateTime.now().toString()))
         mCommentsAdapter.notifyDataSetChanged()
         updateListSize()
         Toast.makeText(this, "Comment posted", Toast.LENGTH_LONG).show()

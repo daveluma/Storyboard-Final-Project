@@ -11,10 +11,13 @@ import android.widget.Button
 import android.widget.GridView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.myapplication.BoardActivity
 import com.example.postactivity.WritePostActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.firestore.FirebaseFirestore
+import java.time.LocalDateTime
 
 
 class Home : AppCompatActivity() {
@@ -24,7 +27,7 @@ class Home : AppCompatActivity() {
     private lateinit var gridView: GridView
     private lateinit var images: IntArray
     private lateinit var posts: ArrayList<Post>
-    private lateinit var database: FirebaseDatabase
+    private lateinit var db: FirebaseFirestore
     private  lateinit var postRef: DatabaseReference
     private lateinit var logoutButton: Button
     private var mAuth: FirebaseAuth? = null
@@ -62,33 +65,33 @@ class Home : AppCompatActivity() {
         // dynamic grid implementation https://www.youtube.com/watch?v=RtitGGmvvTI
         posts = ArrayList()
         gridView = findViewById(R.id.gridView)
-        gridView.adapter = CustomAdapter(this ,posts)
+
         // replace contents of intArrayOf(...) with user's images7
         images = intArrayOf(R.drawable.ic_launcher_background)
 
-        database = FirebaseDatabase.getInstance();
-        postRef = database.getReference("posts")
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth!!.currentUser!!.uid
-        val reference: DatabaseReference = postRef
-        reference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (snapshot in dataSnapshot.children) {
-                    val postFromDB = Post(
-                        snapshot.child("uid").value as String,
-                        snapshot.child("title").value as String,
-                        snapshot.child("body").value as String,
-                        snapshot.child("genre").value as String,
-                        snapshot.child("images").value as List<String>)
-                    posts.add(postFromDB)
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        db.collection("posts").orderBy("createdAt").get().addOnSuccessListener {
+            posts.clear()
+            for (document in it.documents) {
+                val newPost = Post(
+                    document.data?.get("creatorId") as String,
+                    document.data?.get("title") as String,
+                    document.data?.get("body") as String,
+                    document.data?.get("genre") as String,
+                    document.data?.get("images") as ArrayList<String>,
+                    document.data?.get("createdAt") as String)
+                posts.add(newPost)
+            }
+            gridView.adapter = CustomAdapter(this ,posts)
+        }
+    }
     // class for grid view adapter
     public class CustomAdapter: BaseAdapter {
         private lateinit var context: Context
@@ -99,7 +102,6 @@ class Home : AppCompatActivity() {
             this.layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as (LayoutInflater)
             this.posts = posts
         }
-
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val view = layoutInflater.inflate(R.layout.story_board_cover_view, parent, false)
             val title = view.findViewById<TextView>(R.id.textViewCoverTitle)
@@ -107,13 +109,20 @@ class Home : AppCompatActivity() {
 
             title.text = posts[position].title
             description.text = posts[position].body
-
+            view.setOnClickListener {
+                val postIntent = Intent(context, BoardActivity::class.java)
+                postIntent.putExtra("title", posts[position].title)
+                postIntent.putExtra("body", posts[position].body)
+                postIntent.putExtra("genre", posts[position].body)
+                postIntent.putStringArrayListExtra("images", posts[position].images)
+                context.startActivity(postIntent)
+            }
             return view
 
         }
 
         override fun getItem(position: Int): Any {
-            TODO("Get post from db")
+            return "not needed"
         }
 
         override fun getItemId(position: Int): Long {

@@ -1,9 +1,15 @@
 package com.example.storyboardapp
 
-class Post (
-        val uid: String,
+import com.google.type.DateTime
+import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.ArrayList
+
+class Post(
+        val creatorId: String,
         val title: String,
         val body: String,
         val genre: String,
-        val images : List<String>
+        val images: ArrayList<String>,
+        val createdAt: String
 )
