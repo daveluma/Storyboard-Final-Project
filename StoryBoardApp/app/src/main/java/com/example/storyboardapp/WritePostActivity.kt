@@ -131,8 +131,9 @@ class WritePostActivity : AppCompatActivity() {
 
                 FirebaseFirestore.getInstance().collection("users").document(mAuth.uid.toString()).get().addOnSuccessListener {
                     name = it.data?.get("author").toString()
-                    val newPost = Post(uid, name,  title.text.toString(), body.text.toString(), spin, imageURLs, LocalDateTime.now().toString())
-                    db.collection("posts").document().set(newPost).addOnSuccessListener() {
+                    val postDoc = db.collection("posts").document()
+                    val newPost = Post(postDoc.id, name,  title.text.toString(), body.text.toString(), spin, imageURLs, LocalDateTime.now().toString())
+                    postDoc.set(newPost).addOnSuccessListener() {
                         finish()
                     }.addOnFailureListener {
                         Toast.makeText(this, "Something went wrong with uploading your images", Toast.LENGTH_LONG).show()

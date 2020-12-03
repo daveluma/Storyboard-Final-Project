@@ -22,17 +22,18 @@ import java.time.LocalDateTime
 
 
 class Home : AppCompatActivity() {
-    private lateinit var createPost : ImageView
-    private lateinit var boardPost : Button
-    private lateinit var dashboard : Button
+    private lateinit var createPost: ImageView
+    private lateinit var boardPost: Button
+    private lateinit var dashboard: Button
     private lateinit var gridView: GridView
     private lateinit var images: IntArray
     private lateinit var posts: ArrayList<Post>
     private lateinit var db: FirebaseFirestore
     private lateinit var logoutButton: Button
     private var mAuth: FirebaseAuth? = null
-    private  lateinit var uid : String
-//    private lateinit var titles: Array<String>;
+    private lateinit var uid: String
+
+    //    private lateinit var titles: Array<String>;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -61,7 +62,6 @@ class Home : AppCompatActivity() {
         }
 
 
-
         // dynamic grid implementation https://www.youtube.com/watch?v=RtitGGmvvTI
         posts = ArrayList()
         gridView = findViewById(R.id.gridView)
@@ -81,28 +81,33 @@ class Home : AppCompatActivity() {
             posts.clear()
             for (document in it.documents) {
                 val newPost = Post(
-                    document.data?.get("uid") as String,
+                    document.data?.get("postId") as String,
                     document.data?.get("author") as String,
                     document.data?.get("title") as String,
                     document.data?.get("body") as String,
                     document.data?.get("genre") as String,
                     document.data?.get("images") as ArrayList<String>,
-                    document.data?.get("createdAt") as String)
+                    document.data?.get("createdAt") as String
+                )
                 posts.add(newPost)
             }
-            gridView.adapter = CustomAdapter(this ,posts)
+            gridView.adapter = CustomAdapter(this, posts)
         }
     }
+
     // class for grid view adapter
-    public class CustomAdapter: BaseAdapter {
+    public class CustomAdapter : BaseAdapter {
         private lateinit var context: Context
         private lateinit var layoutInflater: LayoutInflater
         private lateinit var posts: ArrayList<Post>
-        constructor(context: Context, posts : ArrayList<Post>) : super() {
+
+        constructor(context: Context, posts: ArrayList<Post>) : super() {
             this.context = context
-            this.layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as (LayoutInflater)
+            this.layoutInflater =
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as (LayoutInflater)
             this.posts = posts
         }
+
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val view = layoutInflater.inflate(R.layout.story_board_cover_view, parent, false)
             val title = view.findViewById<TextView>(R.id.textViewCoverTitle)
@@ -116,8 +121,14 @@ class Home : AppCompatActivity() {
             if (posts[position].images.size > 0) {
                 var storageRef = FirebaseStorage.getInstance().reference
                 storageRef.child("images/" + posts[position].images[0]).downloadUrl.addOnSuccessListener { url ->
-                        Picasso.get().load(url).into(image)
-                    }
+                    Picasso.get().load(url).into(image)
+                }.addOnFailureListener {
+                    Toast.makeText(
+                        context,
+                        "Something went wrong with getting images",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
             author.text = posts[position].author
             if (posts[position].body.length < 162)
@@ -139,6 +150,8 @@ class Home : AppCompatActivity() {
 
             view.setOnClickListener {
                 val postIntent = Intent(context, BoardActivity::class.java)
+                postIntent.putExtra("postId", posts[position].postId)
+                postIntent.putExtra("author", posts[position].author)
                 postIntent.putExtra("title", posts[position].title)
                 postIntent.putExtra("body", posts[position].body)
                 postIntent.putExtra("genre", posts[position].body)
@@ -146,7 +159,6 @@ class Home : AppCompatActivity() {
                 context.startActivity(postIntent)
             }
             return view
-
         }
 
         override fun getItem(position: Int): Any {

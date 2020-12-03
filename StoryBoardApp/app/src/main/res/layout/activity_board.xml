@@ -36,7 +36,7 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="#FFFFFF"
-                android:textSize="20sp"
+                android:textSize="28sp"
                 android:textStyle="bold"
                 android:layout_weight=".6"
                 />
@@ -65,6 +65,9 @@
                     android:background="@drawable/ic_heart"
                     android:tint="@color/teal_700"
                     android:onClick="handleLikeBtnOnPress"/>
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/textViewNumLikes"
                     android:layout_width="wrap_content"
@@ -74,7 +77,33 @@
                     android:textColor="@color/color_white"/>
             </LinearLayout>
         </LinearLayout>
+        <TextView
+            android:id="@+id/textViewAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:textColor="@color/color_white"
+            android:textStyle="bold"
+            />
 
+        <TextView
+            android:id="@+id/textViewGenreHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Genre"
+            android:textColor="@color/color_paragraph"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/textViewGenre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text=""
+            android:textColor="@color/color_paragraph"
+            />
 
         <TextView
             android:id="@+id/textViewBodyHeader"

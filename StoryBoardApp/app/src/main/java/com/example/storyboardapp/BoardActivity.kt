@@ -11,7 +11,9 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.example.storyboardapp.Post
 import com.example.storyboardapp.R
 import com.google.firebase.FirebaseError
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
@@ -26,69 +28,120 @@ class BoardActivity : Activity() {
     private lateinit var mCommentEditText: EditText
     private lateinit var mLikesTextView: TextView
     private lateinit var storage: FirebaseStorage
-    private lateinit var database: FirebaseDatabase
-    private var numLikes = "1,230"
-
+    private lateinit var database: FirebaseFirestore
+    private lateinit var mTitleTextView: TextView
+    private lateinit var mAuthorTextView: TextView
+    private lateinit var mNumLikesTextView: TextView
+    private lateinit var mBodyTextView: TextView
+    private lateinit var mGenreTextView: TextView
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var postId: String
+    private var isLiked = false
+    private var numLikes = 0
     var carouselView: CarouselView? = null
 
-    private var isLiked = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_board)
 
-        val postId = "-MN_57rcUwEs4yal7Ve7"
+        postId = intent.getStringExtra("postId").toString()
+        val title = intent.getStringExtra("title")
+        val body = intent.getStringExtra("body")
+        val genre = intent.getStringExtra("genre")
+        val author = intent.getStringExtra("author")
+        val images = intent.getStringArrayListExtra("images")
+        isLiked = false
 
+        // Firebase
         storage = FirebaseStorage.getInstance()
+        database = FirebaseFirestore.getInstance()
+        mAuth = FirebaseAuth.getInstance()
 
+        // UI
         mLikeButton = findViewById(R.id.buttonLike)
+        mAuthorTextView = findViewById(R.id.textViewAuthor)
         mListViewComments = findViewById(R.id.listViewComments)
         mCommentEditText = findViewById(R.id.editTextComment)
         mLikesTextView = findViewById(R.id.textViewNumLikes)
+        mTitleTextView = findViewById(R.id.textViewTitle)
+        mNumLikesTextView = findViewById(R.id.textViewNumLikes)
+        mBodyTextView = findViewById(R.id.textViewBody)
+        mGenreTextView = findViewById(R.id.textViewGenre)
 
-        var sampleImages = arrayOf(
-            "https://raw.githubusercontent.com/sayyam/carouselview/master/sample/src/main/res/drawable/image_3.jpg",
-            "https://raw.githubusercontent.com/sayyam/carouselview/master/sample/src/main/res/drawable/image_1.jpg",
-            "https://raw.githubusercontent.com/sayyam/carouselview/master/sample/src/main/res/drawable/image_2.jpg"
-        )
 
+        // Set Initial stuff
+        mTitleTextView.text = title
+        mBodyTextView.text = body
+        mGenreTextView.text = genre
+        mAuthorTextView.text = author
+        setIsLiked()
+        setNumLikes()
+
+        var storageRef = FirebaseStorage.getInstance().reference
         carouselView = findViewById(R.id.carouselView);
-        carouselView!!.pageCount = sampleImages.size;
 
-        // Lot of the carousel code from the library's docs (citing)
-        carouselView!!.setImageListener { position, imageView ->
-            Picasso.get().load(sampleImages[position]).into(imageView)
+        // Slide show
+        // Carousel code from the library's docs (citing)
+        if (images!!.size > 0) {
+            carouselView!!.pageCount = images!!.size;
+            carouselView!!.setImageListener { position, imageView ->
+                storageRef.child("images/" + images!![position]).downloadUrl.addOnSuccessListener { url ->
+                    Picasso.get().load(url).into(imageView)
+                }.addOnFailureListener {
+                    Toast.makeText(
+                        this,
+                        "Something went wrong with getting the images",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        } else {
+            carouselView!!.visibility = View.GONE
         }
+        mCommentsAdapter = CommentsAdapter(applicationContext)
+        mListViewComments.adapter = mCommentsAdapter
+
+
 
         // Comments
-//        database = FirebaseDatabase.getInstance()
-//        val commentsRef = database.getReference("comments").child(postId)
-//
-//        // Slide show
-//        commentsRef.addValueEventListener(object : ValueEventListener {
-//
-//            override fun onCancelled(p0: DatabaseError) {
-//                Toast.makeText(this@BoardActivity, "Failed to get the post", Toast.LENGTH_LONG)
-//                    .show()
-//            }
-//
-//            override fun onDataChange(p0: DataSnapshot) {
-//                mCommentsAdapter = CommentsAdapter(applicationContext)
-//                mListViewComments.adapter = mCommentsAdapter
-//                mCommentsAdapter.add(Comment("asdasd", "qweqweqwe"))
-//                mCommentsAdapter.add(Comment("asdqweasd", "qwe"))
-//                mCommentsAdapter.add(Comment("asdqweasd", "qwe"))
-//                mCommentsAdapter.add(Comment("asdqweasd", "qwe"))
-//                mCommentsAdapter.notifyDataSetChanged()
-//
-//                updateListSize()
-//            }
-//        })
-//        // Likes
+        database.collection("comments").document(postId).collection("comments").orderBy("createdAt").get().addOnSuccessListener {
+            for (document in it.documents) {
+                mCommentsAdapter.add(Comment(document.get("username").toString(), document.get("comment").toString(), document.get("createdAt").toString()))
+            }
+            mCommentsAdapter.notifyDataSetChanged()
+            updateListSize()
+        }
 
-        mLikesTextView.text = numLikes;
-        setColor()
     }
 
+    private fun setNumLikes() {
+
+        database.collection("likes")
+            .document(postId).collection("userLikes").get().addOnSuccessListener {
+                numLikes = it.size()
+                updateLikesTextView()
+            }.addOnFailureListener {
+                Toast.makeText(
+                    this,
+                    "Something went wrong with getting the likes",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+    }
+
+    private fun setIsLiked() {
+        database.collection("likes")
+            .document(postId).collection("userLikes").document(mAuth.uid.toString()).get()
+            .addOnSuccessListener {
+                isLiked = it.data != null
+                setColor()
+            }.addOnFailureListener {
+                isLiked = false
+                setColor()
+            }
+    }
+
+    // From a stack overflow post https://stackoverflow.com/questions/18010300/how-to-get-accurate-listview-height-at-runtime
     private fun updateListSize() {
         var totalHeight = 0
         for (i in 0 until mCommentsAdapter.getCount()) {
@@ -106,20 +159,56 @@ class BoardActivity : Activity() {
         if (isLiked) {
             isLiked = false
             // remove person from list of likes in firebase
+            database.collection("likes").document(postId).collection("userLikes")
+                .document(mAuth.uid.toString()).delete()
+            numLikes--;
         } else {
             isLiked = true
             // add person from list of likes in firebase
+            database.collection("likes").document(postId).collection("userLikes")
+                .document(mAuth.uid.toString()).set(Pair("liked", true))
+            numLikes++;
         }
         setColor()
+        updateLikesTextView()
     }
 
     fun handleCommentBtnOnPress(view: View) {
-        // TODO: need to add username from firebase
-        mCommentsAdapter.add(Comment("asdqweasd", mCommentEditText.text.toString(), LocalDateTime.now().toString()))
-        mCommentsAdapter.notifyDataSetChanged()
-        updateListSize()
-        Toast.makeText(this, "Comment posted", Toast.LENGTH_LONG).show()
-        mCommentEditText.setText("")
+        if (mCommentEditText.text.length == 0) {
+            Toast.makeText(
+                this,
+                "Comment must not be empty",
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+        database.collection("users").document(mAuth.uid.toString()).get().addOnSuccessListener {
+            val name = it.data?.get("author").toString()
+            val comment =
+                Comment(name, mCommentEditText.text.toString(), LocalDateTime.now().toString())
+            database.collection("comments").document(postId).collection("comments").document()
+                .set(comment)
+            mCommentsAdapter.add(comment)
+            mCommentsAdapter.notifyDataSetChanged()
+            updateListSize()
+            mCommentEditText.setText("")
+            Toast.makeText(
+                this,
+                "Comment successfully posted",
+                Toast.LENGTH_LONG
+            ).show()
+        }.addOnFailureListener {
+            Toast.makeText(
+                this,
+                "Something went wrong with uploading your images",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+    }
+
+    private fun updateLikesTextView() {
+        mNumLikesTextView.text = numLikes.toString() + " Likes"
     }
 
     private fun setColor() {
