@@ -19,10 +19,9 @@ import kotlin.collections.ArrayList
 
 
 class WritePostActivity : AppCompatActivity() {
-    private val  REQUEST_CODE = 100
+
 
     private var position = 0
-
     private val PICK_IMAGES_CODE = 0
 
     var images : ArrayList<Uri>? = null
@@ -43,18 +42,18 @@ class WritePostActivity : AppCompatActivity() {
     private lateinit var arrow_down: ImageView
     private lateinit var spin: String
     private lateinit var spinner: Spinner
-
-    private lateinit var storage: FirebaseStorage
     private lateinit var storageReference: StorageReference
+    private lateinit var imageURLs : ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_write_post)
 
-        db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance()
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance()
         uid = mAuth!!.currentUser!!.uid
+        storageReference = FirebaseStorage.getInstance().reference
 
 
         no_text = findViewById(R.id.No_im)
@@ -71,11 +70,9 @@ class WritePostActivity : AppCompatActivity() {
         imageSwitcher.setFactory { ImageView(applicationContext) }
 
         images = ArrayList()
-
+        imageURLs = ArrayList()
         spinner = findViewById(R.id.GenreSpin)
 
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.reference;
 
         ArrayAdapter.createFromResource(
                 this,
@@ -93,7 +90,7 @@ class WritePostActivity : AppCompatActivity() {
             pickImageIntent()
         }
 
-        arrow_up.setOnClickListener{
+        arrow_down.setOnClickListener{
             if (position < images!!.size-1){
                 position++
                 imageSwitcher.setImageURI(images!![position])
@@ -103,7 +100,7 @@ class WritePostActivity : AppCompatActivity() {
             }
         }
 
-        arrow_down.setOnClickListener{
+        arrow_up.setOnClickListener{
             if (position > 0){
                 position--
                 imageSwitcher.setImageURI(images!![position])
@@ -129,15 +126,22 @@ class WritePostActivity : AppCompatActivity() {
                 //TODO send title, body, and genre to the next view
                 Toast.makeText(applicationContext,"Success!",Toast.LENGTH_LONG).show()
                 uploadImages()
-                val newPost = Post(uid, title.text.toString(), body.text.toString(), spin, arrayListOf("tf"), LocalDateTime.now().toString())
-                db.collection("posts").document().set(newPost).addOnSuccessListener() {
-                    finish()
+                val mAuth = FirebaseAuth.getInstance()
+                var name = ""
+
+                FirebaseFirestore.getInstance().collection("users").document(mAuth.uid.toString()).get().addOnSuccessListener {
+                    name = it.data?.get("author").toString()
+                    val newPost = Post(uid, name,  title.text.toString(), body.text.toString(), spin, imageURLs, LocalDateTime.now().toString())
+                    db.collection("posts").document().set(newPost).addOnSuccessListener() {
+                        finish()
+                    }.addOnFailureListener {
+                        Toast.makeText(this, "Something went wrong with uploading your images", Toast.LENGTH_LONG).show()
+                    }
                 }.addOnFailureListener {
-                    Toast.makeText(this, "Something went wrong with uploading your images", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Something went wrong with uploading your name", Toast.LENGTH_LONG).show()
                 }
+
             }
-
-
 
         }
 
@@ -156,6 +160,7 @@ class WritePostActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode,resultCode,data)
         no_text.text = ""
+        images = ArrayList()
         //multiple
         if (requestCode == PICK_IMAGES_CODE && resultCode == Activity.RESULT_OK && data!!.clipData != null){
             val count = data.clipData!!.itemCount
@@ -171,6 +176,7 @@ class WritePostActivity : AppCompatActivity() {
             val imageUri = data?.data
             println("here")
             println(imageUri)
+            images!!.add(imageUri!!)
             imageSwitcher.setImageURI(imageUri)
             position = 0
         }
@@ -178,13 +184,10 @@ class WritePostActivity : AppCompatActivity() {
 
     private fun uploadImages() {
         for (i in 0 until images!!.size) {
-            val img = images!![0]
+            val img = images!![i]
             val name = "${UUID.randomUUID()}"
-            val imagesRef = storageReference.child("images/${name}")
-            // TODO
-//            GlideApp.with(this)
-//                .load(gsReference)
-//                .into(imageView)
+            imageURLs.add(name)
+            storageReference.child("images/${name}").putFile(img)
 
         }
     }

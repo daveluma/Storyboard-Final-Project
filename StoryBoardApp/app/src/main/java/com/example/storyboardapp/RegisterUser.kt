@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterUser : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
@@ -83,6 +84,8 @@ class RegisterUser : AppCompatActivity() {
 //            progressBar.visibility = View.GONE
             if (task.isSuccessful) {
                 Toast.makeText(applicationContext, "Registration successful", Toast.LENGTH_LONG).show()
+                FirebaseFirestore.getInstance().collection("users").document(mAuth.uid.toString()).set(
+                    hashMapOf(Pair("author",name)))
                 startActivity(Intent(this@RegisterUser, Home::class.java))
             } else {
                 Toast.makeText(applicationContext, "Registration Failed: " + task.exception.toString(), Toast.LENGTH_LONG).show()
