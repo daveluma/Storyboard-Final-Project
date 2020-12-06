@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.R.attr.radius
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.example.storyboardapp.Post
+import com.example.storyboardapp.Profile
 import com.example.storyboardapp.R
 import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FirebaseAuth
@@ -49,6 +51,7 @@ class BoardActivity : Activity() {
         val body = intent.getStringExtra("body")
         val genre = intent.getStringExtra("genre")
         val author = intent.getStringExtra("author")
+        val authorUid = intent.getStringExtra("authorUid")
         val images = intent.getStringArrayListExtra("images")
         isLiked = false
 
@@ -76,6 +79,12 @@ class BoardActivity : Activity() {
         mAuthorTextView.text = author
         setIsLiked()
         setNumLikes()
+
+        mAuthorTextView.setOnClickListener{
+            val intent = Intent(this@BoardActivity,Profile::class.java)
+            intent.putExtra("uid",authorUid)
+            startActivity(intent)
+        }
 
         var storageRef = FirebaseStorage.getInstance().reference
         carouselView = findViewById(R.id.carouselView);

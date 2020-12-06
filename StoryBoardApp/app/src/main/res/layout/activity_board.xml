@@ -59,12 +59,12 @@
 
                 <ImageButton
                     android:id="@+id/buttonLike"
-                    android:layout_width="22dp"
-                    android:layout_height="26dp"
+                    android:layout_width="26dp"
+                    android:layout_height="24dp"
                     android:layout_weight=".6"
                     android:background="@drawable/ic_heart"
-                    android:tint="@color/teal_700"
-                    android:onClick="handleLikeBtnOnPress"/>
+                    android:onClick="handleLikeBtnOnPress"
+                    android:tint="@color/teal_700" />
                 <Space
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>

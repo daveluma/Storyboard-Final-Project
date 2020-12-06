@@ -23,12 +23,12 @@ import java.time.LocalDateTime
 
 class Home : AppCompatActivity() {
     private lateinit var createPost: ImageView
-    private lateinit var boardPost: Button
-    private lateinit var dashboard: Button
+    private lateinit var homeButton: ImageView
+    private lateinit var profileButton: ImageView
     private lateinit var gridView: GridView
     private lateinit var images: IntArray
     private lateinit var posts: ArrayList<Post>
-    private lateinit var db: FirebaseFirestore
+    protected lateinit var db: FirebaseFirestore
     private lateinit var logoutButton: Button
     private var mAuth: FirebaseAuth? = null
     private lateinit var uid: String
@@ -40,22 +40,24 @@ class Home : AppCompatActivity() {
 
 
         createPost = findViewById(R.id.buttonCreatePost)
-        boardPost = findViewById(R.id.buttonBoardPost)
-        dashboard = findViewById(R.id.buttonDashboard)
         logoutButton = findViewById(R.id.buttonLogout)
+        profileButton = findViewById(R.id.profileButton)
+        homeButton = findViewById(R.id.homeButton)
+
 
         createPost.setOnClickListener {
             startActivity(Intent(this, WritePostActivity::class.java))
         }
 
-        boardPost.setOnClickListener {
-            startActivity(Intent(this, BoardActivity::class.java))
+       // homeButton.setOnClickListener {
+        //}
 
+        profileButton.setOnClickListener {
+            var intent = Intent(this@Home,Profile::class.java)
+            intent.putExtra("uid",mAuth!!.uid.toString())
+            startActivity(intent)
         }
 
-        dashboard.setOnClickListener {
-            startActivity(Intent(this, FeedActivity::class.java))
-        }
         logoutButton.setOnClickListener {
             mAuth!!.signOut()
             finish()
@@ -69,8 +71,8 @@ class Home : AppCompatActivity() {
         // replace contents of intArrayOf(...) with user's images7
         images = intArrayOf(R.drawable.ic_launcher_background)
 
-        db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance()
+        mAuth = FirebaseAuth.getInstance()
         uid = mAuth!!.currentUser!!.uid
 
     }
@@ -82,6 +84,7 @@ class Home : AppCompatActivity() {
             for (document in it.documents) {
                 val newPost = Post(
                     document.data?.get("postId") as String,
+                    document.data?.get("uid") as String,
                     document.data?.get("author") as String,
                     document.data?.get("title") as String,
                     document.data?.get("body") as String,
@@ -91,17 +94,20 @@ class Home : AppCompatActivity() {
                 )
                 posts.add(newPost)
             }
-            gridView.adapter = CustomAdapter(this, posts)
+            gridView.adapter = CustomAdapter(this, posts, db)
         }
     }
+
 
     // class for grid view adapter
     public class CustomAdapter : BaseAdapter {
         private lateinit var context: Context
         private lateinit var layoutInflater: LayoutInflater
         private lateinit var posts: ArrayList<Post>
+        private lateinit var db : FirebaseFirestore
 
-        constructor(context: Context, posts: ArrayList<Post>) : super() {
+        constructor(context: Context, posts: ArrayList<Post>, db: FirebaseFirestore) : super() {
+            this.db = db
             this.context = context
             this.layoutInflater =
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as (LayoutInflater)
@@ -154,10 +160,12 @@ class Home : AppCompatActivity() {
                 postIntent.putExtra("author", posts[position].author)
                 postIntent.putExtra("title", posts[position].title)
                 postIntent.putExtra("body", posts[position].body)
-                postIntent.putExtra("genre", posts[position].body)
+                postIntent.putExtra("genre", posts[position].genre)
+                postIntent.putExtra("authorUid", posts[position].uid)
                 postIntent.putStringArrayListExtra("images", posts[position].images)
                 context.startActivity(postIntent)
             }
+            setNumLikes(posts[position].postId, numLikes)
             return view
         }
 
@@ -171,6 +179,20 @@ class Home : AppCompatActivity() {
 
         override fun getCount(): Int {
             return posts.size
+        }
+
+        private fun setNumLikes(postId: String, view : TextView) {
+            FirebaseFirestore.getInstance().collection("likes")
+                .document(postId).collection("userLikes").get().addOnSuccessListener {
+                    view.text = it.size().toString() + " likes"
+                }.addOnFailureListener {
+                    Toast.makeText(
+                        context,
+                        "Something went wrong with getting the likes",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
         }
 
     }

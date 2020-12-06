@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.storyboardapp.Post
@@ -42,6 +43,7 @@ class WritePostActivity : AppCompatActivity() {
     private lateinit var arrow_down: ImageView
     private lateinit var spin: String
     private lateinit var spinner: Spinner
+    private lateinit var progressBar: ProgressBar
     private lateinit var storageReference: StorageReference
     private lateinit var imageURLs : ArrayList<String>
 
@@ -61,6 +63,8 @@ class WritePostActivity : AppCompatActivity() {
         title = findViewById(R.id.Title)
         post_btn = findViewById(R.id.Post_button)
         add_btn = findViewById(R.id.Add_button)
+        progressBar = findViewById(R.id.progressBar1)
+        progressBar.visibility = View.GONE
 
         arrow_up = findViewById(R.id.arrow_up)
         arrow_down = findViewById(R.id.arrow_down)
@@ -121,6 +125,7 @@ class WritePostActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,"There is no title!",Toast.LENGTH_LONG).show()
             }
             else{
+                progressBar.visibility = View.VISIBLE
                 spin = spinner.selectedItem.toString()
 
                 //TODO send title, body, and genre to the next view
@@ -132,13 +137,15 @@ class WritePostActivity : AppCompatActivity() {
                 FirebaseFirestore.getInstance().collection("users").document(mAuth.uid.toString()).get().addOnSuccessListener {
                     name = it.data?.get("author").toString()
                     val postDoc = db.collection("posts").document()
-                    val newPost = Post(postDoc.id, name,  title.text.toString(), body.text.toString(), spin, imageURLs, LocalDateTime.now().toString())
+                    val newPost = Post(postDoc.id, uid, name,  title.text.toString(), body.text.toString(), spin, imageURLs, LocalDateTime.now().toString())
                     postDoc.set(newPost).addOnSuccessListener() {
                         finish()
                     }.addOnFailureListener {
+                        progressBar.visibility = View.GONE
                         Toast.makeText(this, "Something went wrong with uploading your images", Toast.LENGTH_LONG).show()
                     }
                 }.addOnFailureListener {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(this, "Something went wrong with uploading your name", Toast.LENGTH_LONG).show()
                 }
 

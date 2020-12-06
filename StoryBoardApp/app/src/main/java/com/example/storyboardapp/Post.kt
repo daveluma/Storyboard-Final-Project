@@ -7,6 +7,7 @@ import kotlin.collections.ArrayList
 
 class Post(
         val postId: String,
+        val uid: String,
         val author: String,
         val title: String,
         val body: String,

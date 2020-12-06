@@ -68,27 +68,44 @@
             android:orientation="horizontal"
             android:padding="20dp">
 
-            <Button
-                android:id="@+id/buttonDashboard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:text="Button" />
+            <ImageView
+                android:id="@+id/homeButton"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_home" />
 
             <ImageView
                 android:id="@+id/buttonCreatePost"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/plus"
+                android:layout_weight="1"
                 android:text="Board Post" />
 
-            <Button
-                android:id="@+id/buttonBoardPost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="Test" />
+            <ImageView
+                android:id="@+id/profileButton"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:tint="#96A7AF"
+                app:srcCompat="@drawable/person" />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/pageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Home"
+        android:textColor="@color/color_white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/gridView"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintHorizontal_bias="0.173"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

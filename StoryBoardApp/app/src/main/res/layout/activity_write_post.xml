@@ -192,4 +192,16 @@
         app:layout_constraintVertical_bias="0.196"
         app:srcCompat="@drawable/triangle_left" />
 
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toBottomOf="@+id/BackImage"
+        app:layout_constraintEnd_toEndOf="@+id/BackImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/backImage" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
