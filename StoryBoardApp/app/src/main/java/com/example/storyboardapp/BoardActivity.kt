@@ -158,13 +158,13 @@ class BoardActivity : Activity() {
     // From a stack overflow post https://stackoverflow.com/questions/18010300/how-to-get-accurate-listview-height-at-runtime
     private fun updateListSize() {
         var totalHeight = 0
-        for (i in 0 until mCommentsAdapter.getCount()) {
+        for (i in 0 until mCommentsAdapter.count) {
             val listItem: View? = mCommentsAdapter.getView(i, null, mListViewComments)
             listItem!!.measure(0, 0)
             totalHeight += listItem.measuredHeight
         }
         val params: ViewGroup.LayoutParams = mListViewComments.layoutParams
-        params.height = totalHeight + mListViewComments.dividerHeight * (mCommentsAdapter.count - 1)
+        params.height = totalHeight + mListViewComments.dividerHeight * (mCommentsAdapter.count - 1) + 200
         mListViewComments.layoutParams = params
         mListViewComments.requestLayout()
     }

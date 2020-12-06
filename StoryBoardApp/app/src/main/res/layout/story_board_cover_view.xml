@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@drawable/default_img"
-            android:tint="#4D000000" />
+            android:tint="#99000000" />
 
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:paddingBottom="25dp"
             android:text="@string/cover_title"
             android:textColor="#FFFFFF"
@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_margin="10dp"
+            android:maxHeight="50dp"
             android:textColor="#FFFFFF"
             android:textSize="10sp" />
 
@@ -57,23 +58,25 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginTop="14dp"
-            android:layout_marginRight="5sp"
+            android:layout_marginRight="10dp"
             android:padding="3dp"
             android:text="@string/cover_0_likes"
 
             android:textColor="@color/white"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="14dp"
+            android:padding="3dp"
             android:text="@string/cover_author"
             android:textColor="@color/white"
-            android:layout_marginLeft="5dp"
-            android:padding="3dp"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:textStyle="bold" />
 
     </androidx.cardview.widget.CardView>
 

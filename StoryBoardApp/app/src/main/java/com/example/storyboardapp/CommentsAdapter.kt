@@ -8,7 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.example.storyboardapp.R
-
+// code based on view holder pattern from lecture
 class CommentsAdapter(private val mContext: Context) : BaseAdapter() {
     private var mItems = ArrayList<Comment>()
 
