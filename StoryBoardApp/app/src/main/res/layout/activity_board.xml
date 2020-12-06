@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollViewBoardPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#22343C"
@@ -11,17 +12,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:showDividers="middle"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp">
-
-        <!--        <ImageView-->
-        <!--            android:id="@+id/imageView"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="300dp"-->
-        <!--            android:layout_marginTop="32dp"-->
-        <!--            android:background="#0199FF" />-->
+        android:layout_marginEnd="24dp"
+        android:orientation="vertical"
+        android:showDividers="middle">
 
         <com.synnapps.carouselview.CarouselView
             android:id="@+id/carouselView"
@@ -32,30 +26,29 @@
             app:radius="6dp"
             app:slideInterval="0"
             app:strokeColor="#FF777777"
-            app:strokeWidth="1dp"/>
+            app:strokeWidth="1dp" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1"
             android:layout_marginTop="16dp"
-            >
+            android:layout_weight="1"
+            android:gravity="center">
+
             <TextView
                 android:id="@+id/textViewTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight=".6"
                 android:text=""
                 android:textColor="#FFFFFF"
                 android:textSize="28sp"
-                android:textStyle="bold"
-                android:layout_weight=".6"
-                />
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
 
                 <ImageButton
                     android:id="@+id/buttonLike"
@@ -65,18 +58,21 @@
                     android:background="@drawable/ic_heart"
                     android:onClick="handleLikeBtnOnPress"
                     android:tint="@color/teal_700" />
+
                 <Space
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
+
                 <TextView
                     android:id="@+id/textViewNumLikes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
                     android:layout_marginLeft="5dp"
-                    android:textColor="@color/color_white"/>
+                    android:text=""
+                    android:textColor="@color/color_white" />
             </LinearLayout>
         </LinearLayout>
+
         <TextView
             android:id="@+id/textViewAuthor"
             android:layout_width="match_parent"
@@ -84,91 +80,82 @@
             android:layout_marginTop="20dp"
             android:text=""
             android:textColor="@color/color_white"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewGenreHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Genre"
+            android:text="@string/board_genre"
             android:textColor="@color/color_paragraph"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/textViewGenre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text=""
-            android:textColor="@color/color_paragraph"
-            />
+            android:textColor="@color/color_paragraph" />
 
         <TextView
             android:id="@+id/textViewBodyHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Body"
+            android:text="@string/board_body"
             android:textColor="@color/color_paragraph"
-            android:textStyle="bold"
-            />
-
+            android:textStyle="bold" />
 
 
         <TextView
             android:id="@+id/textViewBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_marginTop="8dp"
+            android:textColor="@color/color_paragraph" />
 
-            android:text="@string/lorem"
-            android:textColor="@color/color_paragraph"
-            />
         <TextView
             android:id="@+id/textViewCommentsHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Comments"
+            android:text="@string/board_comments"
             android:textColor="@color/color_paragraph"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <EditText
 
             android:id="@+id/editTextComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Add comment"
-            android:imeActionLabel="Post"
             android:layout_marginTop="16dp"
+            android:gravity="top|left"
+            android:hint="@string/board_add_comment"
+            android:imeActionLabel="Post"
             android:inputType="textMultiLine"
             android:lines="8"
-            android:minLines="6"
-            android:gravity="top|left"
             android:maxLines="10"
+            android:minLines="6"
             android:overScrollMode="always"
-            android:textSize="14sp"
             android:textColor="@color/color_paragraph"
             android:textColorHint="@color/color_paragraph"
-            />
+            android:textSize="14sp" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Comment"
-            android:layout_marginTop="4dp"
             android:layout_gravity="right"
+            android:layout_marginTop="4dp"
             android:onClick="handleCommentBtnOnPress"
-            />
+            android:text="@string/board_comment" />
+
         <ListView
             android:id="@+id/listViewComments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            >
+            android:layout_marginTop="16dp">
 
         </ListView>
     </LinearLayout>

@@ -14,7 +14,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="#3EDA9B"
-        android:text="Log out"
+        android:text="@string/home_log_out"
         android:textAllCaps="false"
         app:cornerRadius="18dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView2"
@@ -81,7 +81,7 @@
                 android:layout_height="50dp"
                 android:src="@drawable/plus"
                 android:layout_weight="1"
-                android:text="Board Post" />
+                android:text="@string/home_board_post" />
 
             <ImageView
                 android:id="@+id/profileButton"
@@ -99,7 +99,7 @@
         android:id="@+id/pageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Home"
+        android:text="@string/home_home"
         android:textColor="@color/color_white"
         android:textSize="20sp"
         android:textStyle="bold"

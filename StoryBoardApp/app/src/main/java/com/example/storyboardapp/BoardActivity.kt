@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.R.attr.radius
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -71,7 +72,6 @@ class BoardActivity : Activity() {
         mBodyTextView = findViewById(R.id.textViewBody)
         mGenreTextView = findViewById(R.id.textViewGenre)
 
-
         // Set Initial stuff
         mTitleTextView.text = title
         mBodyTextView.text = body
@@ -86,6 +86,11 @@ class BoardActivity : Activity() {
             startActivity(intent)
         }
 
+        // if genre is "Challenge", set background to yellow
+        if (genre == "Challenge") {
+            mTitleTextView.text =  "Challenge: ${mTitleTextView.text}"
+            mTitleTextView.setTextColor(Color.parseColor("#fcd703"))
+        }
         var storageRef = FirebaseStorage.getInstance().reference
         carouselView = findViewById(R.id.carouselView);
 

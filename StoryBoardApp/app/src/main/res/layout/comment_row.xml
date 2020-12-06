@@ -11,7 +11,7 @@
         android1:layout_width="wrap_content"
         android1:layout_height="wrap_content"
         android1:layout_alignParentTop="true"
-        android1:text="Marshmallow"
+        android1:text="@string/comment_marshmallow"
         android1:textAppearance="?android:attr/textAppearanceSmall"
         android1:textColor="@color/color_white" />
 
@@ -22,7 +22,7 @@
         android1:layout_height="wrap_content"
         android1:layout_below="@+id/textViewUsername"
         android1:layout_marginTop="5dp"
-        android1:text="Android 6.0"
+        android1:text="@string/comment_android_6_0"
         android1:textColor="@color/color_paragraph" />
 
 </RelativeLayout>

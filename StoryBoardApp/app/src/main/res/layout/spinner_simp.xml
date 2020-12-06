@@ -5,6 +5,5 @@
     android:gravity="center"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
-    android:textAlignment="viewStart"
     android:textColor="@color/lightGray"
     android:textSize="17dp"></CheckedTextView>

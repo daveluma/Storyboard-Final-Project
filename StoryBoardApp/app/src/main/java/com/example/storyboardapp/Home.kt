@@ -143,7 +143,7 @@ class Home : AppCompatActivity() {
                 description.text = posts[position].body.subSequence(0, 162).toString() + "..."
 
             when (posts[position].genre) {
-                "Comedy" -> genre.setColorFilter(Color.parseColor("#fcd703"))
+                "Comedy" -> genre.setColorFilter(Color.parseColor("#03fcdb"))
                 "Action" -> genre.setColorFilter(Color.parseColor("#0356fc"))
                 "Romance" -> genre.setColorFilter(Color.parseColor("#ff45ae"))
                 "Adventure" -> genre.setColorFilter(Color.parseColor("#1fff17"))
@@ -151,7 +151,7 @@ class Home : AppCompatActivity() {
                 "Thriller" -> genre.setColorFilter(Color.parseColor("#7b07f0"))
                 "Horror" -> genre.setColorFilter(Color.parseColor("#fc0303"))
                 "Educational" -> genre.setColorFilter(Color.parseColor("#ffffff"))
-                else -> genre.setColorFilter(Color.parseColor("#000000"))
+                else -> genre.setColorFilter(Color.parseColor("#fcd703"))
             }
 
             view.setOnClickListener {

@@ -30,7 +30,7 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
             android:paddingBottom="25dp"
-            android:text="Title"
+            android:text="@string/cover_title"
             android:textColor="#FFFFFF"
             android:textSize="24sp" />
 
@@ -40,7 +40,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_margin="10dp"
-            android:text="DescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription"
             android:textColor="#FFFFFF"
             android:textSize="10sp" />
 
@@ -60,7 +59,7 @@
             android:layout_marginTop="14dp"
             android:layout_marginRight="5sp"
             android:padding="3dp"
-            android:text="0 Likes"
+            android:text="@string/cover_0_likes"
 
             android:textColor="@color/white"
             android:textSize="10sp" />
@@ -70,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:text="Author"
+            android:text="@string/cover_author"
             android:textColor="@color/white"
             android:layout_marginLeft="5dp"
             android:padding="3dp"

@@ -2,7 +2,32 @@
     <string name="app_name">StoryBoardApp</string>
     <color name="colorParagraph">#96A7AF</color>
     <color name="colorWhite">#FFF</color>
-    <string name="lorem">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.   Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore mag Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "</string>
+    <string name="board_body">Body</string>
+    <string name="board_comments">Comments</string>
+    <string name="board_add_comment">Add comment</string>
+    <string name="board_comment">Comment</string>
+    <string name="board_genre">Genre</string>
+    <string name="home_log_out">Log out</string>
+    <string name="home_board_post">Board Post</string>
+    <string name="home_home">Home</string>
+    <string name="register_register">Register</string>
+    <string name="register_email">Email</string>
+    <string name="register_password">Password</string>
+    <string name="register_name">Name</string>
+    <string name="register_storyboard">Storyboard</string>
+    <string name="register_create_account">Create account</string>
+    <string name="register_back_to_main">Back To Main</string>
+    <string name="write_post_body">Body</string>
+    <string name="write_post_title">Title</string>
+    <string name="write_post_new_post">New Post</string>
+    <string name="write_post_post">Post</string>
+    <string name="write_post_none">None</string>
+    <string name="write_post_no_image">No Image</string>
+    <string name="comment_marshmallow">Marshmallow</string>
+    <string name="comment_android_6_0">Android 6.0</string>
+    <string name="cover_title">Title</string>
+    <string name="cover_0_likes">0 Likes</string>
+    <string name="cover_author">Author</string>
     <string-array name="GenreSpin">
         <item>Comedy</item>
         <item>Action</item>
