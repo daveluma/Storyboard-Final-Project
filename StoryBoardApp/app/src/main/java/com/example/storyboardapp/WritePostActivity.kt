@@ -24,7 +24,6 @@ class WritePostActivity : AppCompatActivity() {
 
     private var position = 0
     private val PICK_IMAGES_CODE = 0
-
     var images : ArrayList<Uri>? = null
     private lateinit var imageView : ImageView
     private lateinit var imageSwitcher : ImageSwitcher
