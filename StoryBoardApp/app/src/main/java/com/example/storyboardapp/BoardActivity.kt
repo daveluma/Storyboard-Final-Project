@@ -164,7 +164,7 @@ class BoardActivity : Activity() {
             totalHeight += listItem.measuredHeight
         }
         val params: ViewGroup.LayoutParams = mListViewComments.layoutParams
-        params.height = totalHeight + mListViewComments.dividerHeight * (mCommentsAdapter.count - 1) + 200
+        params.height = totalHeight + mListViewComments.dividerHeight * (mCommentsAdapter.count - 1) + mBodyTextView.height +  100
         mListViewComments.layoutParams = params
         mListViewComments.requestLayout()
     }
