@@ -77,7 +77,7 @@ class Profile : AppCompatActivity() {
 
         db = FirebaseFirestore.getInstance()
         mAuth = FirebaseAuth.getInstance()
-        uid = mAuth!!.currentUser!!.uid
+        uid = intent.getStringExtra("uid").toString()
 
         FirebaseFirestore.getInstance().collection("users").document(uid.toString()).get().addOnSuccessListener {
             myUser.text = it.data?.get("author").toString()
@@ -85,7 +85,6 @@ class Profile : AppCompatActivity() {
         }.addOnFailureListener {
             Toast.makeText(this, "Something went wrong with getting the user's name", Toast.LENGTH_LONG).show()
         }
-
     }
 
     override fun onResume() {
